@@ -6,7 +6,7 @@ function getConnection()
 {
   try {
     // Ahora se pueden usar las variables directamente porque ya están definidas
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $conn;
   } catch (PDOException $e) {

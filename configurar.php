@@ -1,23 +1,20 @@
 <?php
-// Incluir la configuración de la base de datos
-include_once('conexion.php');
-
 // Verificar si el formulario fue enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Recibir los datos del formulario
-  $servername = isset($_POST['servername']) ? trim($_POST['servername']) : '';
+  $host = isset($_POST['host']) ? trim($_POST['host']) : '';
   $username = isset($_POST['username']) ? trim($_POST['username']) : '';
   $password = isset($_POST['password']) ? trim($_POST['password']) : '';
   $dbname = isset($_POST['dbname']) ? trim($_POST['dbname']) : '';
 
   // Validar que los campos no estén vacíos
-  if (empty($servername) || empty($username) || empty($password) || empty($dbname)) {
+  if (empty($host) || empty($username) || empty($password) || empty($dbname)) {
     $error_message = "Todos los campos son obligatorios.";
   } else {
     // Crear el contenido del archivo dbconfig.php
     $dbconfig_content = "<?php\n";
     $dbconfig_content .= "// Configuración de la base de datos\n";
-    $dbconfig_content .= "\$servername = '$servername';\n";
+    $dbconfig_content .= "\$host = '$host';\n";
     $dbconfig_content .= "\$username = '$username';\n";
     $dbconfig_content .= "\$password = '$password';\n";
     $dbconfig_content .= "\$dbname = '$dbname';\n";
@@ -25,17 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Intentar escribir el archivo dbconfig.php
     $file = 'dbconfig.php';
     if (file_put_contents($file, $dbconfig_content)) {
-      $conn = getConnection();
-      if ($conn) {
-        $success_message = "La configuración se ha guardado correctamente en '$file'.";
-      } else {
-        $error_message = "Error al conectar a la base de datos.";
-      }
+      $success_message = "La configuración se ha guardado correctamente en '$file'.";
     } else {
       $error_message = "Hubo un error al intentar guardar el archivo de configuración.";
     }
   }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -62,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   <!-- Formulario para ingresar los datos de conexión -->
   <form action="configurar.php" method="POST">
-    <label for="servername">Servername:</label><br>
-    <input type="text" id="servername" name="servername" required><br><br>
+    <label for="host">Host:</label><br>
+    <input type="text" id="host" name="host" required><br><br>
 
     <label for="username">Username:</label><br>
     <input type="text" id="username" name="username" required><br><br>
