@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if ($stmt->execute()) {
 				// Redirigir al usuario a la página principal (index.php)
 				header("Location: /index.php");
-				exit; // Detener la ejecución para evitar ejecutar más código
+				exit;
 			} else {
 				// En caso de error al insertar los datos
 				echo "Error al registrar los datos.";

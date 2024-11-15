@@ -29,6 +29,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 }
 
+// Verificar si dbconfig.php existe
+if (file_exists('dbconfig.php')) {
+  include_once('dbconfig.php');
+
+  try {
+    // Ahora se pueden usar las variables directamente porque ya están definidas
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    echo "<p style='color: green;'>Conexión exitosa con la base de datos.</p>";
+  } catch (PDOException $e) {
+    echo "<p style='color: red;'>Error al conectar con la base de datos: " . $e->getMessage() . "</p>";
+  }
+}
 ?>
 
 <!DOCTYPE html>

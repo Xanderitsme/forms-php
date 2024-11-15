@@ -19,7 +19,7 @@ try {
 
     // Redirigir al usuario a la página principal
     header("Location: /index.php");
-    exit; // Es importante detener la ejecución después de redirigir
+    exit;
 } catch (PDOException $e) {
     // Manejar excepciones y mostrar un mensaje de error
     echo "Error al crear la tabla: " . $e->getMessage();

@@ -10,8 +10,8 @@ function getConnection()
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $conn;
   } catch (PDOException $e) {
-    // Si hay un error, se redirige a configurar.php
     header("Location: configurar.php");
+    exit;
   }
 }
 ?>
