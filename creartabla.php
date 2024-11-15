@@ -1,6 +1,6 @@
 <?php
 // Incluir el archivo de conexión a la base de datos
-include('conexion.php');
+include_once('conexion.php');
 
 try {
     // Obtener la conexión a la base de datos

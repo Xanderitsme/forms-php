@@ -1,6 +1,6 @@
 <?php
 // Incluir la configuración de la base de datos
-include('conexion.php');
+include_once('conexion.php');
 
 try {
 	// Conectar a la base de datos con PDO

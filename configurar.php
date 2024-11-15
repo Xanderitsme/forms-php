@@ -1,4 +1,7 @@
 <?php
+// Incluir la configuración de la base de datos
+include_once('conexion.php');
+
 // Verificar si el formulario fue enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   // Recibir los datos del formulario
@@ -22,7 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Intentar escribir el archivo dbconfig.php
     $file = 'dbconfig.php';
     if (file_put_contents($file, $dbconfig_content)) {
-      $success_message = "La configuración se ha guardado correctamente en '$file'.";
+      $conn = getConnection();
+      if ($conn) {
+        $success_message = "La configuración se ha guardado correctamente en '$file'.";
+      } else {
+        $error_message = "Error al conectar a la base de datos.";
+      }
     } else {
       $error_message = "Hubo un error al intentar guardar el archivo de configuración.";
     }
