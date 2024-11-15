@@ -1,35 +1,43 @@
 <?php
+// Incluir el archivo de conexión a la base de datos
 include('conexion.php');
+
+// Obtener la conexión a la base de datos
+$conn = getConnection();
 
 // Verificar si el formulario fue enviado
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Capturar y sanitizar los datos recibidos
-    $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
-    $edad = isset($_POST['edad']) ? (int)$_POST['edad'] : 0;
-    $correo = isset($_POST['correo']) ? trim($_POST['correo']) : '';
+	// Capturar y sanitizar los datos recibidos
+	$nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
+	$edad = isset($_POST['edad']) ? (int)$_POST['edad'] : 0;
+	$correo = isset($_POST['correo']) ? trim($_POST['correo']) : '';
 
-    // Validar los datos
-    if (empty($nombre) || empty($edad) || empty($correo)) {
-        echo "Por favor complete todos los campos.";
-    } else {
-        // Preparar la consulta para evitar inyección de SQL
-        $stmt = $conn->prepare("INSERT INTO personas (nombre, edad, correo) VALUES (?, ?, ?)");
-        $stmt->bind_param("sis", $nombre, $edad, $correo); // "s" para string, "i" para integer
+	// Validar los datos
+	if (empty($nombre) || empty($edad) || empty($correo)) {
+		echo "Por favor complete todos los campos.";
+	} else {
+		try {
+			// Preparar la consulta para evitar inyección de SQL
+			$sql = "INSERT INTO personas (nombre, edad, correo) VALUES (:nombre, :edad, :correo)";
+			$stmt = $conn->prepare($sql);
 
-        // Ejecutar la consulta
-        if ($stmt->execute()) {
-            // Redirigir al usuario a la página principal (index.php)
-            header("Location: /index.php");
-            exit; // Detener la ejecución para que no se ejecute más código
-        } else {
-            // En caso de error al insertar los datos
-            echo "Error al registrar los datos: " . $stmt->error;
-        }
+			// Asociar parámetros
+			$stmt->bindParam(':nombre', $nombre, PDO::PARAM_STR);
+			$stmt->bindParam(':edad', $edad, PDO::PARAM_INT);
+			$stmt->bindParam(':correo', $correo, PDO::PARAM_STR);
 
-        // Cerrar la declaración preparada
-        $stmt->close();
-    }
+			// Ejecutar la consulta
+			if ($stmt->execute()) {
+				// Redirigir al usuario a la página principal (index.php)
+				header("Location: /index.php");
+				exit; // Detener la ejecución para evitar ejecutar más código
+			} else {
+				// En caso de error al insertar los datos
+				echo "Error al registrar los datos.";
+			}
+		} catch (PDOException $e) {
+			// Mostrar mensaje de error en caso de excepción
+			echo "Error al registrar los datos: " . $e->getMessage();
+		}
+	}
 }
-
-// Cerrar la conexión a la base de datos
-$conn->close();
