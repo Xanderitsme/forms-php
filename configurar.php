@@ -35,8 +35,12 @@ if (file_exists('dbconfig.php')) {
   include_once('dbconfig.php');
 
   try {
-    // Ahora se pueden usar las variables directamente porque ya están definidas
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    $options = [
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, 
+      PDO::ATTR_TIMEOUT => 3
+    ];
+
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password, $options);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo "<p style='color: green;'>Conexión exitosa con la base de datos.</p>";
   } catch (PDOException $e) {
